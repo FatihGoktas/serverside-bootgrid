@@ -24,18 +24,31 @@ if (isset($params['sort'])) {
     $order = " ORDER BY {$sort['col']} {$sort['way']} ";
 }
 
-/* LIMIT, ALWAYS USING (PAGINATION ETC.) */
-if ($params['rowCount'] > -1) {
-    $offset = 0;
-    $row = 0;
-    if ($params['current'] == 1) {
-        $row = $params['rowCount'];
-    } else {
-        $row = $params['rowCount'];
-        $offset = ($params['rowCount'] * ($params['current']-1));
+/* type : 1 > mysql - 2 > mssql
+function limit($current, $rowCount, $type) {
+    switch(type){
+        case 1:
+            //.....
+            break;
+        case 2:
+            if ($rowCount > -1) {
+                $offset = 0;
+                $row = 0;
+                if ($current == 1) {
+                    $row = $rowCount;
+                } else {
+                    $row = $rowCount;
+                    $offset = ($rowCount * ($current-1));
+                }
+                $limit = " OFFSET {$offset} ROWS FETCH NEXT {$row} ROWS ONLY ";
+            }
+            break;
     }
-    $limit = " OFFSET {$offset} ROWS FETCH NEXT {$row} ROWS ONLY ";
+    return $limit;
 }
+
+/* LIMIT, ALWAYS USING (PAGINATION ETC.) */
+$limit = limit($params['current'], $params['rowCount'], 1)
 
 /* IF SEARCH USING */
 if (isset($params['searchPhrase']) && $params['searchPhrase'] != "") {
