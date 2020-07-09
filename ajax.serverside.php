@@ -24,7 +24,7 @@ if (isset($params['sort'])) {
     $order = " ORDER BY {$sort['col']} {$sort['way']} ";
 }
 
-/* type : 1 > mysql - 2 > mssql
+/* type : 1 > mysql - 2 > mssql */
 function limit($current, $rowCount, $type) {
     switch(type){
         case 1:
